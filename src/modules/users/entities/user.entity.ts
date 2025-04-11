@@ -1,11 +1,13 @@
 import { IsEmail } from 'class-validator';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class User {
@@ -20,11 +22,16 @@ export class User {
   email: string;
 
   @Column()
-  passwordHash: string;
+  hashedPassword: string;
 
   @CreateDateColumn()
   createdAt?: Date;
 
   @UpdateDateColumn()
   updatedAt?: Date;
+
+  async setPassword(password: string): Promise<void> {
+    const saltRounds = await bcrypt.genSalt();
+    this.hashedPassword = await bcrypt.hash(password, saltRounds);
+  }
 }
