@@ -43,7 +43,7 @@ export class UsersService {
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const { email, password, name } = createUserDto;
     const saltRounds = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const passwordHash = await bcrypt.hash(password, saltRounds);
 
     const existingUser = await this.usersRepository.findByEmail(email);
     if (existingUser) {
@@ -53,7 +53,7 @@ export class UsersService {
     const user = this.usersRepository.create({
       name,
       email,
-      password: hashedPassword,
+      passwordHash,
     });
     return this.usersRepository.save(user);
   }

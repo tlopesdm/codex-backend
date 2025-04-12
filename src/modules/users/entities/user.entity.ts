@@ -22,16 +22,11 @@ export class User {
   email: string;
 
   @Column()
-  password: string;
+  passwordHash: string;
 
   @CreateDateColumn()
   createdAt?: Date;
 
   @UpdateDateColumn()
   updatedAt?: Date;
-
-  async hashPassword(password: string): Promise<void> {
-    const saltRounds = await bcrypt.genSalt();
-    this.password = await bcrypt.hash(password, saltRounds);
-  }
 }
