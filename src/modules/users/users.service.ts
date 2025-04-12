@@ -4,9 +4,7 @@ import {
   NotFoundException,
   Scope,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UserRepository } from './repositories/user.repository';
@@ -44,6 +42,8 @@ export class UsersService {
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const { email, password, name } = createUserDto;
+    const saltRounds = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const existingUser = await this.usersRepository.findByEmail(email);
     if (existingUser) {
@@ -53,10 +53,8 @@ export class UsersService {
     const user = this.usersRepository.create({
       name,
       email,
+      password: hashedPassword,
     });
-
-    
-    await user.hashPassword(password);
     return this.usersRepository.save(user);
   }
 
