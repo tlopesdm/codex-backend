@@ -27,7 +27,7 @@ export class AuthService {
     const user = await this.usersService.findByEmail(email);
     if (
       user &&
-      (await this.usersService.comparePasswords(password, user.hashedPassword))
+      (await this.usersService.comparePasswords(password, user.password))
     ) {
       const payload: JwtPayload = {
         sub: user.id,

@@ -22,7 +22,7 @@ export class User {
   email: string;
 
   @Column()
-  hashedPassword: string;
+  password: string;
 
   @CreateDateColumn()
   createdAt?: Date;
@@ -30,8 +30,8 @@ export class User {
   @UpdateDateColumn()
   updatedAt?: Date;
 
-  async setPassword(password: string): Promise<void> {
+  async hashPassword(password: string): Promise<void> {
     const saltRounds = await bcrypt.genSalt();
-    this.hashedPassword = await bcrypt.hash(password, saltRounds);
+    this.password = await bcrypt.hash(password, saltRounds);
   }
 }

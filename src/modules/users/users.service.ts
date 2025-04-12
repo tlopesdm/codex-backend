@@ -54,7 +54,9 @@ export class UsersService {
       name,
       email,
     });
-    await user.setPassword(password);
+
+    
+    await user.hashPassword(password);
     return this.usersRepository.save(user);
   }
 
