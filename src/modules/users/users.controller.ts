@@ -1,3 +1,4 @@
+import { JwtAuthGuard } from '@guards/jwt-auth.guard';
 import {
   Controller,
   Get,
@@ -6,19 +7,12 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { AuthGuard } from '@nestjs/passport';
-import { User } from './entities/user.entity';
 import { Request } from 'express';
-
-interface UserResponse {
-  id: string;
-  name: string;
-  email: string;
-}
+import { User } from './entities/user.entity';
+import { UserResponse } from './interfaces/user-response.interface';
+import { UsersService } from './users.service';
 
 @Controller('users')
-@UseGuards(AuthGuard('jwt'))
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -27,6 +21,7 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('userInfo')
   async getMe(@Req() req: Request): Promise<UserResponse> {
     const user = req.user as User;
@@ -36,6 +31,7 @@ export class UsersController {
     return this.usersService.getUserProfile(user.id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findUser(@Param('id') id: string): Promise<User> {
     try {
