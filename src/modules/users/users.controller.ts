@@ -13,6 +13,7 @@ import { UserResponse } from './interfaces/user-response.interface';
 import { UsersService } from './users.service';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -21,7 +22,6 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('userInfo')
   async getMe(@Req() req: Request): Promise<UserResponse> {
     const user = req.user as User;
@@ -31,7 +31,6 @@ export class UsersController {
     return this.usersService.getUserProfile(user.id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findUser(@Param('id') id: string): Promise<User> {
     try {
