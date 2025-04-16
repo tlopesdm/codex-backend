@@ -21,6 +21,7 @@
       "@decorators/*": ["./src/common/decorators/*"],
       "@guards/*": ["src/modules/auth/guards/*"],
       "@interceptors/*": ["./src/common/interceptors/*"],
+      "@interfaces/*": ["./src/common/interfaces/*"],
       "@utils/*": ["./src/common/utils/*"],
       "@config/*": ["./src/config/*"],
       "@modules/*": ["./src/modules/*"],
