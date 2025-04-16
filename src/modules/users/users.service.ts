@@ -61,9 +61,6 @@ export class UsersService {
 
   async getUserProfile(id: string): Promise<any> {
     const user = await this.findById(id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
     const profile = {
       id: user.id,
       name: user.name,

@@ -7,7 +7,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { AuthRequest } from '../../common/utils/interfaces/auth-request.interface';
 import { User } from './entities/user.entity';
 import { UserResponse } from './interfaces/user-response.interface';
 import { UsersService } from './users.service';
@@ -22,13 +22,13 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
-  @Get('userInfo')
-  async getMe(@Req() req: Request): Promise<UserResponse> {
-    const user = req.user as User;
+  @Get('profile')
+  async getUserProfile(@Req() req: AuthRequest): Promise<UserResponse> {
+    const user = req.user;
     if (!user) {
       throw new NotFoundException('Current User not found');
     }
-    return this.usersService.getUserProfile(user.id);
+    return this.usersService.getUserProfile(user.sub);
   }
 
   @Get(':id')
